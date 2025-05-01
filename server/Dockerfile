@@ -1,10 +1,13 @@
-FROM python:3.10-slim
+FROM python:3.10
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy shared proto files from root/common/
+COPY common/ common/
 
+# Copy the server code
 COPY server/ .
+
+RUN pip install --no-cache-dir grpcio grpcio-tools
 
 CMD ["python", "server.py"]

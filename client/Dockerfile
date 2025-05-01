@@ -1,12 +1,15 @@
-FROM python:3.10-slim
+FROM python:3.10
 
 WORKDIR /app
 
-COPY requirements.txt .  
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy shared gRPC files from root/common/ into the container
+COPY common/ common/
 
-COPY . .
+# Copy everything else in client/ (rest_gateway, etc.)
+COPY client/ .
 
-EXPOSE 8000
+COPY requirements.txt .
+
+RUN pip install --default-timeout=100 --retries=10 --no-cache-dir -r ./requirements.txt
 
 CMD ["uvicorn", "rest_gateway:app", "--host", "0.0.0.0", "--port", "8000"]
