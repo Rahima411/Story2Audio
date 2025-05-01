@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    ports:
+      - "50051:50051"
+    volumes:
+      - ./server:/app
+    working_dir: /app
+    command: ["python", "server.py"]
+
+  client:
+    build:
+      context: ./client
+      dockerfile: client/Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - server
+    volumes:
+      - ./client:/app
+    working_dir: /app
+    command: ["uvicorn", "rest_gateway:app", "--host", "0.0.0.0", "--port", "8000"]

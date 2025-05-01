@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environments
+venv/
+client/venv/
+server/venv/
+
+# VSCode
+.vscode/
+
+# System
+.DS_Store
+
+# Docker
+*.log

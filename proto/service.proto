@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package tts;
+
+// TTS service definition
+service TTSService {
+  // Basic TTS inference (unary)
+  rpc Generate (TextRequest) returns (AudioReply) {}
+
+  // Server streaming response (streaming audio back in chunks)
+  rpc StreamGenerate (TextRequest) returns (stream AudioReply) {}
+
+  // Bidirectional streaming (for advanced interactive use cases)
+  rpc ChatTTS (stream TextRequest) returns (stream AudioReply) {}
+}
+
+// Input message: text for TTS
+message TextRequest {
+  string text = 1;
+}
+
+// Output message: TTS audio (e.g., raw PCM, or WAV bytes)
+message AudioReply {
+  bytes audio_data = 1;
+  string format = 2; // e.g., "wav", "mp3", optional
+}

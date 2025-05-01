@@ -1,0 +1,9 @@
+fastapi==0.115.12
+gradio==5.28.0
+gradio_client==1.10.0
+grpcio==1.71.0
+grpcio-tools==1.71.0
+requests==2.32.3
+streamlit==1.45.0
+uvicorn==0.34.2
+
