@@ -8,6 +8,6 @@ COPY common/ common/
 # Copy the server code
 COPY server/ .
 
-RUN pip install --no-cache-dir grpcio grpcio-tools
+RUN pip install --no-cache-dir grpcio grpcio-tools soundfile
 
 CMD ["python", "server.py"]

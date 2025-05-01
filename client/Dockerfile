@@ -2,13 +2,11 @@ FROM python:3.10
 
 WORKDIR /app
 
-# Copy shared gRPC files from root/common/ into the container
 COPY common/ common/
-
-# Copy everything else in client/ (rest_gateway, etc.)
-COPY client/ .
-
+COPY . .
 COPY requirements.txt .
+
+ENV PYTHONPATH=/app
 
 RUN pip install --default-timeout=100 --retries=10 --no-cache-dir -r ./requirements.txt
 

@@ -8,6 +8,7 @@ services:
       - "50051:50051"
     volumes:
       - ./server:/app
+      - ./common:/app/common
     working_dir: /app
     command: ["python", "server.py"]
 
@@ -22,5 +23,19 @@ services:
       - server
     volumes:
       - ./client:/app
+      - ./common:/app/common
     working_dir: /app
     command: ["uvicorn", "rest_gateway:app", "--host", "0.0.0.0", "--port", "8000"]
+
+  frontend:
+    container_name: tts-streamlit-frontend
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "8501:8501"
+    depends_on:
+      - client
+    volumes:
+      - ./frontend:/app
+
