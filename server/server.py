@@ -4,28 +4,42 @@ import time
 import io
 import soundfile as sf
 import numpy as np
+from fastapi import HTTPException
 
 from common import service_pb2, service_pb2_grpc
 
+from common.text_preprocessing import preprocess_for_tts  # Add this if you want to preprocess
 
 class TTSServiceServicer(service_pb2_grpc.TTSServiceServicer):
     def Generate(self, request, context):
-
         print(f"[gRPC Server] Received text: {request.text}")
+        start_time = time.time()
 
-        # Generate a sine wave as dummy audio
-        duration = 1.0  # seconds
-        samplerate = 16000  # Hz
-        t = np.linspace(0, duration, int(samplerate * duration), endpoint=False)
-        freq = 440  # A4 note
-        audio = 0.5 * np.sin(2 * np.pi * freq * t)
+        # Optional: Preprocess
+        chunks = preprocess_for_tts(request.text)
 
-        # Save to WAV in-memory
-        buffer = io.BytesIO()
-        sf.write(buffer, audio, samplerate, format='WAV')
-        audio_bytes = buffer.getvalue()
+        if not chunks:
+            raise HTTPException(status_code=400, detail="No valid text after preprocessing.")
 
-        return service_pb2.AudioReply(audio_data=audio_bytes, format="wav")
+        final_audio = b""
+
+        for chunk in chunks:
+            # Generate a sine wave as dummy audio
+            duration = 1.0  # seconds
+            samplerate = 16000  # Hz
+            t = np.linspace(0, duration, int(samplerate * duration), endpoint=False)
+            freq = 440  # A4 note
+            audio = 0.5 * np.sin(2 * np.pi * freq * t)
+
+            # Save to WAV in-memory
+            buffer = io.BytesIO()
+            sf.write(buffer, audio, samplerate, format='WAV')
+            audio_bytes = buffer.getvalue()
+            final_audio += audio_bytes
+
+        elapsed = time.time() - start_time
+
+        return service_pb2.AudioReply(audio_data=final_audio, format="wav", chunks=chunks, time_taken=elapsed)
 
     def StreamGenerate(self, request, context):
         for i in range(3):

@@ -23,4 +23,6 @@ message TextRequest {
 message AudioReply {
   bytes audio_data = 1;
   string format = 2; // e.g., "wav", "mp3", optional
+  repeated string chunks = 3;
+  double time_taken = 4;
 }

@@ -8,6 +8,8 @@ COPY common/ common/
 # Copy the server code
 COPY server/ .
 
-RUN pip install --no-cache-dir grpcio grpcio-tools soundfile
+COPY requirements.txt .
+
+RUN pip install --default-timeout=100 --retries=10 --no-cache-dir -r ./requirements.txt
 
 CMD ["python", "server.py"]
