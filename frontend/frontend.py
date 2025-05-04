@@ -66,7 +66,10 @@ st.markdown("<hr>", unsafe_allow_html=True)
 
 # --- Voice Selection & Theme Placeholder ---
 mood = st.selectbox("🎭 Choose Your Mood", ["Happy", "Sad", "Scary"])
-voice = st.selectbox("🎤 Choose a Voice", ["Default", "Female 1", "Male 1", "Female 2", "Males 2"])
+voice = st.selectbox(
+    "🎤 Choose a Voice",
+    ["Default", "US Female 1", "US Female 2", "US Male 1", "US Male 2", "Canadian Male", "Scottish Male", "Indian Male"]
+)
 
 if mood == "Happy":
     primary_color = "#f7b731"
@@ -135,6 +138,7 @@ st.markdown(f"""
 st.subheader("📝 Enter Your Story Below")
 text = st.text_area("Once upon a time...", height=150)
 st.session_state["text"] = text
+st.session_state['voice'] = voice
 
 # --- Generate Button ---
 col1, col2, col3 = st.columns([1, 2, 1])
@@ -161,19 +165,19 @@ if generate:
                 st.audio(audio_bytes, format="audio/wav")
 
                 # # Page flip sound
-                flip_sound_path = "flip.wav"
-                if os.path.exists(flip_sound_path):
-                    with open(flip_sound_path, "rb") as f:
-                        b64_audio = base64.b64encode(f.read()).decode()
+                # flip_sound_path = "flip.wav"
+                # if os.path.exists(flip_sound_path):
+                #     with open(flip_sound_path, "rb") as f:
+                #         b64_audio = base64.b64encode(f.read()).decode()
 
-                    # Inject base64 audio tag with autoplay
-                    st.markdown(f"""
-                        <audio autoplay loop>
-                            <source src="data:audio/wav;base64,{b64_audio}" type="audio/wav">
-                        </audio>
-                    """, unsafe_allow_html=True)
-                else:
-                    st.warning("🔊 Page-flip audio file not found")
+                #     # Inject base64 audio tag with autoplay
+                #     st.markdown(f"""
+                #         <audio autoplay loop>
+                #             <source src="data:audio/wav;base64,{b64_audio}" type="audio/wav">
+                #         </audio>
+                #     """, unsafe_allow_html=True)
+                # else:
+                #     st.warning("🔊 Page-flip audio file not found")
 
                 # Centered download button
                 with st.container():

@@ -19,7 +19,6 @@ tts_model_path = os.path.join(model_dir, "speecht5_tts")
 vocoder_path = os.path.join(model_dir, "speecht5_hifigan")
 embeddings_path = os.path.join(model_dir, 'spk_embs')
 
-
 # Create models directory if needed
 os.makedirs(model_dir, exist_ok=True)
 
@@ -54,27 +53,59 @@ else:
 pt_files = [f for f in os.listdir(embeddings_dir) if f.endswith(".pt")]
 if pt_files:
     for fname in pt_files:
-        key = os.path.splitext(fname)[0]  # e.g., male_0 from male_0.pt
+        key = os.path.splitext(fname)[0] 
         path = os.path.join(embeddings_dir, fname)
         embeddings[key] = torch.load(path).to(device)
     print(f"📦 Loaded {len(embeddings)} speaker embeddings.")
+
 else:
     print("🌐 No local speaker embeddings found. Downloading default embeddings...")
-    embeddings_dataset = load_dataset("Matthijs/cmu-arctic-xvectors", split="validation")
-    speaker_map = {
-        "male": [7306, 7310],
-        "female": [7309, 7311]
-    }
-    for gender, indices in speaker_map.items():
-        for i, idx in enumerate(indices):
-            speaker_embedding = torch.tensor(embeddings_dataset[idx]["xvector"]).unsqueeze(0)
-            save_name = f"{gender.lower()}_{i}.pt"
-            save_path = os.path.join(embeddings_dir, save_name)
-            torch.save(speaker_embedding, save_path)
-            embeddings[f"{gender.lower()}_{i}"] = speaker_embedding.to(device)
-            print(f"✅ Saved {gender.title()} embedding at: {save_path}")
+    dataset = load_dataset("Matthijs/cmu-arctic-xvectors")
+    validation_data = dataset["validation"]
 
+    for i in range(len(validation_data)):
+    item = validation_data[i]
+    filename = item["filename"]
+    
+    # Extract speaker ID from filename
+    # Example: cmu_us_awb_arctic-wav-arctic_a0003 -> awb
+    if "cmu_us_" in filename:
+        parts = filename.split("_")
+        if len(parts) >= 3:
+            speaker_id = parts[2]
             
+            # If this is a speaker we want and haven't saved yet
+            if speaker_id in speakers and speaker_id not in saved_speakers:
+                # Convert x-vector to PyTorch tensor
+                xvector = torch.tensor(item["xvector"], dtype=torch.float)
+
+                if xvector.dim() == 1:  # If it's [512]
+                  # Reshape to [1, 512]
+                  xvector = xvector.unsqueeze(0)
+
+                elif xvector.shape[0] != 1:
+                    xvector = xvector[0].unsqueeze(0)  
+                else:
+                    print(f"  OK: Already has correct shape")
+                
+                # Save the tensor
+                torch.save(xvector, f"./models/spk_embs/{speaker_id}.pt")
+                saved_speakers[speaker_id] = True
+                print(f"Saved embedding for speaker {speaker_id}")
+                
+                # Print the shape of the saved tensor
+                print(f"  Shape: {xvector.shape}")
+    
+    # Break once we've found all speakers
+    if len(saved_speakers) == len(speakers):
+        print("Found all speaker embeddings, stopping iteration")
+        break
+
+
+
+
+
+
 # Input text
 text = "Hello! This is a text-to-speech test using SpeechT5 running offline."
 
@@ -93,4 +124,4 @@ waveform = waveform.squeeze(0).cpu()
 # Save the waveform as a playable audio file
 output_path = "output.wav"
 torchaudio.save(output_path, waveform.detach().unsqueeze(0), 16000)
-print(f"✅ Audio saved at {output_path}")
+print(f"✅ Audio saved at {output_path}"
