@@ -17,6 +17,7 @@ service TTSService {
 // Input message: text for TTS
 message TextRequest {
   string text = 1;
+  string voice = 2;
 }
 
 // Output message: TTS audio (e.g., raw PCM, or WAV bytes)

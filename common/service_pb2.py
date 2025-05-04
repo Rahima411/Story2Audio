@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rservice.proto\x12\x03tts\"\x1b\n\x0bTextRequest\x12\x0c\n\x04text\x18\x01 \x01(\t\"T\n\nAudioReply\x12\x12\n\naudio_data\x18\x01 \x01(\x0c\x12\x0e\n\x06\x66ormat\x18\x02 \x01(\t\x12\x0e\n\x06\x63hunks\x18\x03 \x03(\t\x12\x12\n\ntime_taken\x18\x04 \x01(\x01\x32\xaa\x01\n\nTTSService\x12/\n\x08Generate\x12\x10.tts.TextRequest\x1a\x0f.tts.AudioReply\"\x00\x12\x37\n\x0eStreamGenerate\x12\x10.tts.TextRequest\x1a\x0f.tts.AudioReply\"\x00\x30\x01\x12\x32\n\x07\x43hatTTS\x12\x10.tts.TextRequest\x1a\x0f.tts.AudioReply\"\x00(\x01\x30\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rservice.proto\x12\x03tts\"*\n\x0bTextRequest\x12\x0c\n\x04text\x18\x01 \x01(\t\x12\r\n\x05voice\x18\x02 \x01(\t\"T\n\nAudioReply\x12\x12\n\naudio_data\x18\x01 \x01(\x0c\x12\x0e\n\x06\x66ormat\x18\x02 \x01(\t\x12\x0e\n\x06\x63hunks\x18\x03 \x03(\t\x12\x12\n\ntime_taken\x18\x04 \x01(\x01\x32\xaa\x01\n\nTTSService\x12/\n\x08Generate\x12\x10.tts.TextRequest\x1a\x0f.tts.AudioReply\"\x00\x12\x37\n\x0eStreamGenerate\x12\x10.tts.TextRequest\x1a\x0f.tts.AudioReply\"\x00\x30\x01\x12\x32\n\x07\x43hatTTS\x12\x10.tts.TextRequest\x1a\x0f.tts.AudioReply\"\x00(\x01\x30\x01\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -32,9 +32,9 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'service_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
   _globals['_TEXTREQUEST']._serialized_start=22
-  _globals['_TEXTREQUEST']._serialized_end=49
-  _globals['_AUDIOREPLY']._serialized_start=51
-  _globals['_AUDIOREPLY']._serialized_end=135
-  _globals['_TTSSERVICE']._serialized_start=138
-  _globals['_TTSSERVICE']._serialized_end=308
+  _globals['_TEXTREQUEST']._serialized_end=64
+  _globals['_AUDIOREPLY']._serialized_start=66
+  _globals['_AUDIOREPLY']._serialized_end=150
+  _globals['_TTSSERVICE']._serialized_start=153
+  _globals['_TTSSERVICE']._serialized_end=323
 # @@protoc_insertion_point(module_scope)

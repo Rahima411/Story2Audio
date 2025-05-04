@@ -5,7 +5,6 @@ import base64
 import time
 
 from common import service_pb2, service_pb2_grpc
-from common.text_preprocessing import preprocess_for_tts  # Optional if preprocessing on client
 
 app = FastAPI()
 
@@ -20,15 +19,8 @@ def generate_tts(request: TextInput):
         with grpc.insecure_channel('server:50051') as channel:
             stub = service_pb2_grpc.TTSServiceStub(channel)
 
-            # Preprocessing optional on client
-            # chunks = preprocess_for_tts(request.text)
-            # final_audio = b""
-            # for chunk in chunks:
-            #     grpc_request = service_pb2.TextRequest(text=chunk)
-            #     grpc_response = stub.Generate(grpc_request)
-            #     final_audio += grpc_response.audio_data
             start_time = time.time()
-            grpc_request = service_pb2.TextRequest(text=request.text)
+            grpc_request = service_pb2.TextRequest(text=request.text, voice=request.voice or "Default")
             grpc_response = stub.Generate(grpc_request)
     
             b64_audio = base64.b64encode(grpc_response.audio_data).decode("utf-8")

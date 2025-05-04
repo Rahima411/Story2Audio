@@ -9,6 +9,7 @@ services:
     volumes:
       - ./server:/app
       - ./common:/app/common
+      - ./models:/app/models
     working_dir: /app
     command: ["python", "server.py"]
 

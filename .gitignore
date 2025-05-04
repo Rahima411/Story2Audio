@@ -3,7 +3,7 @@ __pycache__/
 *.pyc
 
 # Virtual environments
-venv/
+.venv/
 client/venv/
 server/venv/
 
@@ -15,3 +15,8 @@ server/venv/
 
 # Docker
 *.log
+
+# Local Model Files -->Ignore 
+models/
+*.safetensors
+*.pt

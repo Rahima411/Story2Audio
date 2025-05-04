@@ -8,3 +8,8 @@ docopt==0.6.2
 num2words==0.5.14
 soundfile==0.13.1
 streamlit-lottie==0.0.5
+torch==2.7.0
+datasets==3.5.1
+torchaudio==2.7.0
+transformers==4.51.3
+sentencepiece==0.2.0
