@@ -1,152 +1,191 @@
 # Story2Audio System
 
-This project is a Text-to-Speech (TTS) system with a modular architecture, including a frontend (Streamlit), backend (FastAPI), and gRPC services for communication between components. The system converts text input into speech output using pre-trained TTS models.
+![Build](https://img.shields.io/github/actions/workflow/status/Rahima411/Story2Audio/ci.yml?branch=main)
+![Python](https://img.shields.io/badge/python-3.8+-blue)
+![License](https://img.shields.io/github/license/Rahima411/Story2Audio)
 
-## Architecture
-```
-├── client/                  # gRPC client implementation
-├── common/                  # Shared protobuf/gRPC files
-├── frontend/                # Streamlit web interface
-│   ├── streamlit/           # Streamlit app files
-├── server/                  # TTS server implementation
-│   ├── text_preprocessing.py # Text normalization
-│   └── tts_engine.py        # Core TTS functionality
-├── proto/                   # Protocol buffer definitions
-├── venv/                    # Python virtual environment
-├── docker-compose.yml       # Docker orchestration
-├── README.md                # Project documentation
-├── requirements.txt         # Python dependencies
-└── tts_test.py              # Test script for TTS 
-```
+This project is a **Text-to-Speech (TTS)** system with a modular architecture, including a **Streamlit frontend**, **FastAPI backend**, and **gRPC** services for efficient communication. It converts text input into speech using pre-trained TTS models.
+
 ---
 
-## Prerequisites
-- Docker and Docker Compose
+## 📚 Table of Contents
+- [Architecture](#architecture)
+- [Features](#features)
+- [Installation](#installation)
+- [Running the TTS Test Script](#running-the-tts-test-script)
+- [Running the Full System](#running-the-full-system)
+- [Configuration](#configuration)
+- [Testing](#testing)
+- [Usage](#usage)
+- [Model Sources](#model-sources)
+- [Limitations](#limitations)
+- [Development Notes](#development-notes)
+- [Contributing](#contributing)
+- [License](#license)
 
-- Python 3.8+
+---
 
-- *(Optional)* NVIDIA Docker for GPU acceleration
+## 📏 Architecture
+```
+├── client/                  # gRPC client implementation
+│   ├── rest_gateway.py      # Core client functionality
+│   └── Dockerfile          
+├── common/                 # Shared protobuf/gRPC files
+├── frontend/               # Streamlit web interface
+│   ├── frontend.py         # Main frontend script
+│   └── Dockerfile         
+├── server/                 # TTS server implementation
+│   ├── text_preprocessing.py   # Text normalization
+│   ├── tts_engine.py       # Core TTS functionality
+│   ├── server.py           # Core server functionality
+│   └── Dockerfile         
+├── proto/                  # Protocol buffer definitions
+├── docker-compose.yml      # Docker orchestration
+├── README.md               # Project documentation
+├── requirements.txt        # Python dependencies
+└── tts_test.py             # Test script for TTS
+```
 
-## Installation
-### 1.Clone the repository:
+---
 
+## ✨ Features
+- 🎙️ Convert text into lifelike speech
+- ⚙️ Modular architecture with gRPC, REST, and UI layers
+- 🚀 Dockerized for easy CI/CD deployment
+- 🌐 Streamlit UI and FastAPI backend
+- 🔤 SentencePiece for tokenization
+- 🧠 Powered by FastSpeech2, Tacotron2, Torchaudio
+
+---
+
+## ⚡ Installation
+
+### 1. Clone the repository
 ```bash
-git clone <https://github.com/Rahima411/Story2Audio>
+git clone https://github.com/Rahima411/Story2Audio
 cd Story2Audio
 ```
-### 2.Create and activate a virtual environment:
 
+### 2. Create and activate a virtual environment
 ```bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-### 2.Install dependencies:
-
+### 3. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
+
 ---
 
-## Running the TTS Test Script
-
-Run `tts_test.py` to test TTS functionality and preload model embeddings:
+## 🔢 Running the TTS Test Script
+Test the TTS functionality and preload models:
 
 ```bash
 python tts_test.py
 ```
 
-This will:
-- Load necessary TTS models and embeddings
-- Process sample text inputs
-- Generate audio outputs
-- Provide performance metrics
-
-### For verbose output:
+For verbose logging:
 ```bash
 python tts_test.py --verbose
 ```
 
-## Running the Full System
+---
+
+## 🚧 Running the Full System
+
 ### Option 1: Docker Compose (Recommended)
 ```bash
 docker-compose up --build
 ```
-This will start:
-- The gRPC TTS server
-- The REST gateway
-- The Streamlit frontend
+This starts:
+- gRPC TTS server
+- REST gateway
+- Streamlit frontend
 
 ### Option 2: Manual Startup
-#### Start the gRPC server:
 ```bash
+# Start the server
 cd server
 python server.py
-```
-#### Start the REST gateway:
-```bash
+
+# Start the REST gateway
 cd ../client
 python rest_gateway.py
-```
-#### Start the frontend:
-```bash
+
+# Start the frontend
 cd ../frontend/streamlit
 streamlit run frontend.py
 ```
 
 ---
 
-## Configuration
-- Server: `server/server.py`
+## 📊 Configuration
+- gRPC Server: `server/server.py`
+- REST Gateway: `client/rest_gateway.py`
 - Frontend: `frontend/streamlit/frontend.py`
-- Protocol Buffers: `proto/service.proto`
+- Protobuf Definition: `proto/service.proto`
 
 ---
 
-## Testing
-
-After starting the services:
-- Access the **Streamlit UI**: [http://localhost:8501](http://localhost:8501)
-- Send REST API requests: `POST http://localhost:8000/tts`
+## 🔧 Testing
+- Open **Streamlit UI** at: [http://localhost:8501](http://localhost:8501)
+- Send **REST API POST** to: `http://localhost:8000/tts`
 
 ---
 
-## Usage
+## 🔊 Usage
+- Start with Docker Compose
+- Access UI on browser
+- Input text and click **Generate Speech**
+- Playback or download the generated audio
 
-- Start all services with Docker Compose
-- Open the Streamlit frontend
-- Enter your text and click “Generate Speech”
-- Listen to or download the generated audio
-
----
-
-## Model Sources
-
-This system uses:
-- Transformers-based TTS models (e.g., FastSpeech2, Tacotron2)
-- SentencePiece for tokenization
-- Torchaudio for audio processing
-- Pre-trained models from Hugging Face
+![Demo](docs/demo.gif)
 
 ---
 
-## Limitations
-
-- **Performance**: Inference may be slow without GPU
-- **Language support**: Limited to supported models
-- **Audio quality**: Depends on the chosen model
-- **Text length**: Long texts may need to be split
-- **Special characters**: Handling may vary
+## 🔗 Model Sources
+- [SpeechT5 – Microsoft (MIT License)](https://huggingface.co/microsoft/speecht5)
+- Torchaudio + SentencePiece integration
 
 ---
 
-## Development Notes
+## ⚠ Limitations
+- ⚡ Performance may be slow without GPU
+- 🌍 Limited language/model support
+- 🔊 Audio quality varies by model
 
-To regenerate gRPC Python code from `.proto` files:
+---
+
+## 📒 Development Notes
+To regenerate gRPC code from `.proto` files:
 ```bash
 python -m grpc_tools.protoc -Iproto --python_out=common --grpc_python_out=common proto/service.proto
 ```
 
-Use `tts_test.py` to verify TTS functionality and cache models for faster startup.
+Use `tts_test.py` to preload models for faster startup.
+
+---
+
+## 🤝 Contributing
+Pull requests are welcome! To contribute:
+
+1. Fork the repo  
+2. Create a feature branch: `git checkout -b feature/your-feature`  
+3. Commit: `git commit -am 'Add feature'`  
+4. Push: `git push origin feature/your-feature`  
+5. Open a pull request
+
+For significant changes, please open an issue first.
+
+---
+
+## 📄 License
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+Note: This project uses third-party models (e.g., SpeechT5 by Microsoft) licensed under their respective terms. Please ensure compliance with each model’s license.
+
+```
 
 ---
