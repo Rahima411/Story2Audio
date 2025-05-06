@@ -18,12 +18,16 @@ service TTSService {
 message TextRequest {
   string text = 1;
   string voice = 2;
+  string message_id = 3;
 }
 
 // Output message: TTS audio (e.g., raw PCM, or WAV bytes)
 message AudioReply {
   bytes audio_data = 1;
-  string format = 2; // e.g., "wav", "mp3", optional
-  repeated string chunks = 3;
-  double time_taken = 4;
+  string format = 2;     // e.g., "wav", "mp3"
+  repeated string chunks = 3;  // The text chunks that were processed
+  float time_taken = 4;  // Time taken to generate the audio in seconds
+  int32 chunk_index = 5; // For streaming, the index of this chunk
+  int32 total_chunks = 6; // For streaming, the total number of chunks
+  string message_id = 7;  // For chat, matches the request message_id
 }

@@ -20,3 +20,6 @@ server/venv/
 models/
 *.safetensors
 *.pt
+
+# Server and Client Cache
+cache/

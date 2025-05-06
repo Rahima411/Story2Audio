@@ -147,59 +147,62 @@ with col2:
 
 # --- Output Section ---
 if generate:
-    with st.spinner("🔄 Turning your story into sound magic..."):
-        try:
-            response = requests.post("http://tts-rest-client:8000/generate", json={"text": text, "voice": voice})
-            if response.status_code == 200:
-                data = response.json()
-                audio_bytes = base64.b64decode(data["audio_data"])
-                time_taken = response.headers.get("X-Time-Taken") or data.get("time_taken")
-                st.markdown("🧮 Character count: `{}`".format(len(st.session_state.get("text", ""))))
-                chunks = data.get("chunks", [])
+    if not text.strip():
+        st.warning("⚠️ Please enter some story text before generating audio.")
+    else:
+        with st.spinner("🔄 Turning your story into sound magic..."):
+            try:
+                response = requests.post("http://tts-rest-client:8000/generate", json={"text": text, "voice": voice})
+                if response.status_code == 200:
+                    data = response.json()
+                    audio_bytes = base64.b64decode(data["audio_data"])
+                    time_taken = response.headers.get("X-Time-Taken") or data.get("time_taken")
+                    st.markdown("🧮 Character count: `{}`".format(len(st.session_state.get("text", ""))))
+                    chunks = data.get("chunks", [])
 
-                with st.expander("🔍 Show Preprocessed Chunks (for curious minds)"):
-                    for i, chunk in enumerate(chunks):
-                        st.write(f"{chunk}")
+                    with st.expander("🔍 Show Preprocessed Chunks (for curious minds)"):
+                        for i, chunk in enumerate(chunks):
+                            st.write(f"{chunk}")
 
-                st.success("✅ Your magical audio story is ready!")
-                st.audio(audio_bytes, format="audio/wav")
+                    st.success("✅ Your magical audio story is ready!")
+                    st.audio(audio_bytes, format="audio/wav")
 
-                # # Page flip sound
-                # flip_sound_path = "flip.wav"
-                # if os.path.exists(flip_sound_path):
-                #     with open(flip_sound_path, "rb") as f:
-                #         b64_audio = base64.b64encode(f.read()).decode()
+                    # Page flip sound
+                    flip_sound_path = "flip.wav"
+                    if os.path.exists(flip_sound_path):
+                        with open(flip_sound_path, "rb") as f:
+                            b64_audio = base64.b64encode(f.read()).decode()
 
-                #     # Inject base64 audio tag with autoplay
-                #     st.markdown(f"""
-                #         <audio autoplay loop>
-                #             <source src="data:audio/wav;base64,{b64_audio}" type="audio/wav">
-                #         </audio>
-                #     """, unsafe_allow_html=True)
-                # else:
-                #     st.warning("🔊 Page-flip audio file not found")
+                        # Inject base64 audio tag with autoplay
+                        st.markdown(f"""
+                            <audio autoplay loop>
+                                <source src="data:audio/wav;base64,{b64_audio}" type="audio/wav">
+                            </audio>
+                        """, unsafe_allow_html=True)
+                    else:
+                        st.warning("🔊 Page-flip audio file not found")
 
-                # Centered download button
-                with st.container():
-                    st.markdown("<div class='centered-button-container'>", unsafe_allow_html=True)
-                    st.download_button(
-                        label="⬇️ Download Your Audio Story",
-                        data=io.BytesIO(audio_bytes),
-                        file_name="storybook.wav",
-                        mime="audio/wav",
-                        key="download_button",
-                        use_container_width=True
-                    )
-                    st.markdown("</div>", unsafe_allow_html=True)
+                    # Centered download button
+                    with st.container():
+                        st.markdown("<div class='centered-button-container'>", unsafe_allow_html=True)
+                        st.download_button(
+                            label="⬇️ Download Your Audio Story",
+                            data=io.BytesIO(audio_bytes),
+                            file_name="storybook.wav",
+                            mime="audio/wav",
+                            key="download_button",
+                            use_container_width=True
+                        )
+                        st.markdown("</div>", unsafe_allow_html=True)
 
-                if time_taken:
-                    st.markdown(f"⏱️ Time taken: `{float(time_taken):.2f}` seconds")
+                    if time_taken:
+                        st.markdown(f"⏱️ Time taken: `{float(time_taken):.2f}` seconds")
 
-            else:
-                st.error("❌ Something went wrong while generating the story audio.")
+                else:
+                    st.error("❌ Something went wrong while generating the story audio.")
 
-        except requests.exceptions.RequestException as e:
-            st.error(f"❌ Could not connect to the TTS microservice.\n\n{e}")
+            except requests.exceptions.RequestException as e:
+                st.error(f"❌ Could not connect to the TTS microservice.\n\n{e}")
 
 
 st.markdown("""

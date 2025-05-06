@@ -10,7 +10,10 @@ services:
       - ./server:/app
       - ./common:/app/common
       - ./models:/app/models
+      - ./cache:/app/cache
     working_dir: /app
+    environment:
+      - LOG_DIR=/app/server/logs
     command: ["python", "server.py"]
 
   client:
@@ -25,6 +28,8 @@ services:
     volumes:
       - ./client:/app
       - ./common:/app/common
+    environment:
+      - LOG_DIR=/app/client/logs
     working_dir: /app
     command: ["uvicorn", "rest_gateway:app", "--host", "0.0.0.0", "--port", "8000"]
 
