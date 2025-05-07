@@ -131,7 +131,7 @@ streamlit run frontend.py
 
 ## 🔧 Testing
 - Open **Streamlit UI** at: [http://localhost:8501](http://localhost:8501)
-- Send **REST API POST** to: `http://localhost:8000/tts`
+- Send **REST API POST** to: `http://localhost:8000/generate`
 
 ---
 
