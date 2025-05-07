@@ -186,6 +186,4 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) for detai
 
 Note: This project uses third-party models (e.g., SpeechT5 by Microsoft) licensed under their respective terms. Please ensure compliance with each model’s license.
 
-```
-
 ---
