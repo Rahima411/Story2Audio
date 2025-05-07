@@ -6,8 +6,6 @@ import torchaudio
 from transformers import SpeechT5Processor, SpeechT5ForTextToSpeech, SpeechT5HifiGan
 import logging
 
-# Import the preprocess_for_tts function directly
-# Note: Make sure text_preprocessing.py doesn't import from tts_engine.py
 from text_preprocessing import preprocess_for_tts
 
 # Log to track to better handle errors in any case of setback
