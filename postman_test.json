@@ -1,0 +1,117 @@
+{
+  "info": {
+    "name": "TTS API Test Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "tts-api-test-collection"
+  },
+  "item": [
+    {
+      "name": "Basic TTS Request",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"text\": \"Hello, this is a test.\", \"voice\": \"Default\"}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/generate",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "generate"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Empty Text",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"text\": \"\", \"voice\": \"Default\"}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/generate",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "generate"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Long Paragraph",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"text\": \"This is a longer text that we are using to test the performance and capability of the text to speech system. It should be able to handle this without crashing.\", \"voice\": \"Default\"}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/generate",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "generate"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Special Characters",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"text\": \"Text with symbols #@$%^&*()\", \"voice\": \"Default\"}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/generate",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8000",
+          "path": [
+            "generate"
+          ]
+        }
+      }
+    }
+  ]
+}

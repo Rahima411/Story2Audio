@@ -90,6 +90,9 @@ async def health_check():
 def generate_tts(request: TextInput, stub: service_pb2_grpc.TTSServiceStub = Depends(get_grpc_stub)):
     start_time = time.time()
 
+    if not request.text.strip():
+        raise HTTPException(status_code=400, detail="Input text cannot be empty.")
+
     try:
         logger.info(f"Received TTS request: text='{request.text[:50]}...', voice='{request.voice}'")
         grpc_request = service_pb2.TextRequest(text=request.text, voice=request.voice or "Default")
